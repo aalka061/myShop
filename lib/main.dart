@@ -10,28 +10,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'My Shop',
       theme: ThemeData(
-        // is not restarted.
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.purple,
+        accentColor: Colors.deepOrange,
+        fontFamily: 'Lato',
       ),
       routes: {
         '/': (ctx) => ProductsOverviewScreen(),
       },
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Shop"),
-      ),
-      body: Center(
-        child: Text("Let us bild a shop"),
-      ),
     );
   }
 }
