@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_shop/screens/products_overview_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,7 +15,9 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+      routes: {
+        '/': (ctx) => ProductsOverviewScreen(),
+      },
     );
   }
 }
