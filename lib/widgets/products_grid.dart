@@ -7,6 +7,10 @@ import '../providers/products.dart';
 class ProductsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // it is important to clean up our provided data
+    // flutter cleans up the widgets for you, but provided data still
+    // exist in the memory => memory leak ==> memory overflow
+    // the good thing that ChangeNotifierProvider already does for you!
     final productsData = Provider.of<Products>(context);
     final products = productsData.items;
 
@@ -19,8 +23,9 @@ class ProductsGrid extends StatelessWidget {
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
       ),
-      itemBuilder: (ctx, index) => ChangeNotifierProvider(
-        create: (c) => products[index],
+      itemBuilder: (ctx, index) => ChangeNotifierProvider.value(
+        //builder: (c) => products[index],
+        value: products[index],
         child: ProductItem(),
       ),
     );
