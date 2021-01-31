@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:my_shop/screens/product_detail_screen.dart';
-import 'package:my_shop/screens/products_overview_screen.dart';
+import './screens/product_detail_screen.dart';
+import './screens/products_overview_screen.dart';
 import './providers/products.dart';
+import './providers/Cart.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,12 +12,22 @@ void main() {
 
 // use ChangeNotifierProvider , builder when instantite data for first time
 // user ChangeNotifierProvider.value when you want to work with an existing data
+// since we are going to use Cart data in so many screens, it makes sense we register
+// cart data provider in the main widget
+// Multiple providers: class takes list of providers
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (ctx) => Products(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (ctx) => Products(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => Cart(),
+        )
+      ],
       child: MaterialApp(
         title: 'My Shop',
         theme: ThemeData(
