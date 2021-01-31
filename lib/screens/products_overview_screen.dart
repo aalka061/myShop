@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_shop/providers/products.dart';
+
+import '../widgets/badge.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/products_grid.dart';
@@ -30,7 +31,9 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
               setState(() {
                 if (selectedValue == FilterOptions.Favorites) {
                   _showOnlyFavorites = true;
-                } else {}
+                } else {
+                  _showOnlyFavorites = false;
+                }
               });
             },
             itemBuilder: (_) => [
@@ -43,6 +46,13 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
                 value: FilterOptions.All,
               ),
             ],
+          ),
+          Badge(
+            child: IconButton(
+              icon: Icon(Icons.shopping_cart),
+              onPressed: () {},
+            ),
+            value: "0",
           )
         ],
       ),
