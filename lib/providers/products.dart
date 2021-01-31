@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 import './product.dart';
 
+// make sure you call notifiy listeners to rebuilt the widgets that are interesed in our data here
+// any mehtod that manuplates products, shall be placed in products provider.
+// Most of the time, you would want to reset settings selected by user when a user
+// goes to another screen
 class Products with ChangeNotifier {
   List<Product> _items = [
     Product(
@@ -38,7 +42,12 @@ class Products with ChangeNotifier {
     ),
   ];
 
+  // var _showFavoriesOnly = false;
+
   List<Product> get items {
+    // if (_showFavoriesOnly) {
+    //   return _items.where((element) => element.isFavorite).toList();
+    // }
     return [..._items];
   }
 
@@ -49,4 +58,18 @@ class Products with ChangeNotifier {
   void addProduct() {
     notifyListeners();
   }
+
+  List<Product> get favoriteItems {
+    return _items.where((prodItem) => prodItem.isFavorite).toList();
+  }
+
+//   void showFavoritesOnly() {
+//     _showFavoriesOnly = true;
+//     notifyListeners();
+//   }
+
+//   void showAll() {
+//     _showFavoriesOnly = false;
+//     notifyListeners();
+//   }
 }
