@@ -23,3 +23,11 @@ Data provider gets attached to a widget. Once it is attached, any child within t
 - Different Provider syntax: (ChangeNotifierProvider vs ChangeNotifierProvider.value vs MultiProvider) 
 - Consumer vs provider.of 
 
+##Screenshots
+![Screenshot from 2021-02-05 17-58-54](https://user-images.githubusercontent.com/32111609/107097961-1b18ac80-67dc-11eb-90e8-c5cb3d6d5769.png)
+
+![Screenshot from 2021-02-05 17-59-30](https://user-images.githubusercontent.com/32111609/107097964-1b18ac80-67dc-11eb-8b40-99bb24b43b76.png)
+
+![Screenshot from 2021-02-05 17-59-44](https://user-images.githubusercontent.com/32111609/107097965-1b18ac80-67dc-11eb-9704-62c7d2c8876f.png)
+
+![Screenshot from 2021-02-05 18-00-00](https://user-images.githubusercontent.com/32111609/107097966-1bb14300-67dc-11eb-951e-66912a91f781.png)
