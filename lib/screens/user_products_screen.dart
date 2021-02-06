@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_shop/providers/products.dart';
+import 'package:my_shop/widgets/app_drawer.dart';
+import 'package:my_shop/widgets/user_product_item.dart';
 import 'package:provider/provider.dart';
 
 class UserProductsScreen extends StatelessWidget {
@@ -18,9 +20,10 @@ class UserProductsScreen extends StatelessWidget {
           )
         ],
       ),
+      drawer: AppDrawer(),
       body: ListView.builder(
         itemCount: productsProvider.items.length,
-        itemBuilder: (_, i) => {},
+        itemBuilder: (_, i) => UserProductItem(productsProvider.items[i]),
       ),
     );
   }
