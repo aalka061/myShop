@@ -60,7 +60,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           ? Text('Enter URL')
                           : FittedBox(
                               child: Image.network(_imageUrlController.text),
-                              fit: BoxFit.cover,
+                              fit: BoxFit.scaleDown,
                             ),
                     ),
                     // text form field takes as much width as possible,
@@ -71,6 +71,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         keyboardType: TextInputType.url,
                         textInputAction: TextInputAction.done,
                         controller: _imageUrlController,
+                        onEditingComplete: () {
+                          setState(() {});
+                        },
                       ),
                     )
                   ],
