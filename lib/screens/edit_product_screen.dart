@@ -9,10 +9,29 @@ class EditProductScreen extends StatefulWidget {
 
 class _EditProductScreenState extends State<EditProductScreen> {
   final _imageUrlController = TextEditingController();
+  //keep track if this image url in focus or not
+  final _imageUrlFocus = FocusNode();
+
+  // when focus is lost, then we update the UI
+  void _updateImageUrl() {
+    if (!_imageUrlFocus.hasFocus) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    _imageUrlFocus.addListener(_updateImageUrl);
+    super.initState();
+  }
 
   @override
   void dispose() {
+    // dispose all fonucs nodes or listerners
+    _imageUrlFocus.removeListener(_updateImageUrl);
     _imageUrlController.dispose();
+    _imageUrlFocus.dispose();
+
     super.dispose();
   }
 
@@ -71,6 +90,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         keyboardType: TextInputType.url,
                         textInputAction: TextInputAction.done,
                         controller: _imageUrlController,
+                        focusNode: _imageUrlFocus,
                         onEditingComplete: () {
                           setState(() {});
                         },
