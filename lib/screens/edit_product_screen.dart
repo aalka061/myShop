@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../providers/product.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const ROUTE = '/edit_product_screen';
@@ -11,6 +12,19 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _imageUrlController = TextEditingController();
   //keep track if this image url in focus or not
   final _imageUrlFocus = FocusNode();
+
+  // this global key allows us to interact with the state of the form widget
+  // all we need to do now is to establish connection of the form to this
+  // global key
+  final _form = GlobalKey<FormState>();
+
+  var _editProduct = Product(
+    id: null,
+    title: '',
+    price: 0,
+    description: '',
+    imageUrl: '',
+  );
 
   // when focus is lost, then we update the UI
   void _updateImageUrl() {
@@ -35,33 +49,73 @@ class _EditProductScreenState extends State<EditProductScreen> {
     super.dispose();
   }
 
+  // to save form, you would need to interact with the form somehow
+  // to do that we need a global key (it is one of the rare instances that we need to use global key)
+  void _saveForm() {
+    // the save method triggers a method (onSaved) in every form field that allow us to
+    // to take the value entered in the text field
+    _form.currentState.save();
+    print(_editProduct.title);
+    print(_editProduct.description);
+    print(_editProduct.price);
+    print(_editProduct.imageUrl);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [],
+        actions: [IconButton(icon: Icon(Icons.save), onPressed: () {})],
         title: Text('Edit Product'),
       ),
       // it better to avoid list view column because of data loss
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Form(
+          key: _form,
           child: SingleChildScrollView(
             child: Column(
               children: [
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Title'),
                   textInputAction: TextInputAction.next,
+                  onSaved: (value) {
+                    _editProduct = Product(
+                      id: null,
+                      title: value,
+                      price: _editProduct.price,
+                      description: _editProduct.description,
+                      imageUrl: _editProduct.imageUrl,
+                    );
+                  },
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Price'),
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
+                  onSaved: (value) {
+                    _editProduct = Product(
+                      id: null,
+                      title: _editProduct.title,
+                      price: double.parse(value),
+                      description: _editProduct.description,
+                      imageUrl: _editProduct.imageUrl,
+                    );
+                  },
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Description'),
                   maxLines: 3,
                   keyboardType: TextInputType.multiline,
+                  onSaved: (value) {
+                    _editProduct = Product(
+                      id: null,
+                      title: _editProduct.title,
+                      price: _editProduct.price,
+                      description: value,
+                      imageUrl: _editProduct.imageUrl,
+                    );
+                  },
                 ),
                 Row(
                   children: [
@@ -79,22 +133,33 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           ? Text('Enter URL')
                           : FittedBox(
                               child: Image.network(_imageUrlController.text),
-                              fit: BoxFit.scaleDown,
+                              fit: BoxFit.cover,
                             ),
                     ),
                     // text form field takes as much width as possible,
                     // however a row has unconstrained width
                     Expanded(
                       child: TextFormField(
-                        decoration: InputDecoration(labelText: 'Image url'),
-                        keyboardType: TextInputType.url,
-                        textInputAction: TextInputAction.done,
-                        controller: _imageUrlController,
-                        focusNode: _imageUrlFocus,
-                        onEditingComplete: () {
-                          setState(() {});
-                        },
-                      ),
+                          decoration: InputDecoration(labelText: 'Image url'),
+                          keyboardType: TextInputType.url,
+                          textInputAction: TextInputAction.done,
+                          controller: _imageUrlController,
+                          focusNode: _imageUrlFocus,
+                          onEditingComplete: () {
+                            setState(() {});
+                          },
+                          onFieldSubmitted: (_) {
+                            _saveForm();
+                          },
+                          onSaved: (value) {
+                            _editProduct = Product(
+                              id: null,
+                              title: _editProduct.title,
+                              price: _editProduct.price,
+                              description: _editProduct.description,
+                              imageUrl: value,
+                            );
+                          }),
                     )
                   ],
                 )
