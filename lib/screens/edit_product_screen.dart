@@ -122,6 +122,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     } else if (double.tryParse(val) == null) {
                       return "Please enter valid price";
                     }
+                    if (double.parse(val) <= 0) {
+                      return 'Please enter a price greater than 0';
+                    }
                     return null;
                   },
                   onSaved: (value) {
@@ -141,6 +144,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   validator: (val) {
                     if (val.isEmpty) {
                       return 'Please provide a description';
+                    }
+                    if (val.length < 0) {
+                      return 'Should be at least 10 characters long';
                     }
                     return null;
                   },
@@ -187,6 +193,23 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           },
                           onFieldSubmitted: (_) {
                             _saveForm();
+                          },
+                          validator: (val) {
+                            if (val.isEmpty) {
+                              return 'Please provide an image url';
+                            }
+                            if (!val.startsWith('http') &&
+                                !val.startsWith('https')) {
+                              return 'Please enter a valid URL.';
+                            }
+
+                            if (!val.endsWith('.png') &&
+                                !val.endsWith('jpg') &&
+                                !val.endsWith('.jpeg') &&
+                                !val.endsWith('.png')) {
+                              return 'Please enter valid image URL';
+                            }
+                            return null;
                           },
                           onSaved: (value) {
                             _editProduct = Product(
