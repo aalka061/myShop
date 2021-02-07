@@ -54,6 +54,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
   void _saveForm() {
     // the save method triggers a method (onSaved) in every form field that allow us to
     // to take the value entered in the text field
+    final isValid = _form.currentState.validate();
+    if (!isValid) {
+      return;
+    }
     _form.currentState.save();
     print(_editProduct.title);
     print(_editProduct.description);
@@ -65,7 +69,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [IconButton(icon: Icon(Icons.save), onPressed: () {})],
+        actions: [
+          IconButton(
+            icon: Icon(Icons.save),
+            onPressed: _saveForm,
+          )
+        ],
         title: Text('Edit Product'),
       ),
       // it better to avoid list view column because of data loss
@@ -77,8 +86,22 @@ class _EditProductScreenState extends State<EditProductScreen> {
             child: Column(
               children: [
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Title'),
+                  decoration: InputDecoration(
+                    labelText: 'Title',
+                    // error configuration
+                  ),
                   textInputAction: TextInputAction.next,
+                  // validator has to be trigger to work
+                  // you can use autovalide in the form to do that
+
+                  validator: (val) {
+                    // return null, means input is correct
+                    // return "error_message", means validation falied with error_message
+                    if (val.isEmpty) {
+                      return 'Please provide a value';
+                    }
+                    return null;
+                  },
                   onSaved: (value) {
                     _editProduct = Product(
                       id: null,
@@ -93,6 +116,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   decoration: InputDecoration(labelText: 'Price'),
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
+                  validator: (val) {
+                    if (val.isEmpty) {
+                      return 'Please provide a price';
+                    } else if (double.tryParse(val) == null) {
+                      return "Please enter valid price";
+                    }
+                    return null;
+                  },
                   onSaved: (value) {
                     _editProduct = Product(
                       id: null,
@@ -107,6 +138,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   decoration: InputDecoration(labelText: 'Description'),
                   maxLines: 3,
                   keyboardType: TextInputType.multiline,
+                  validator: (val) {
+                    if (val.isEmpty) {
+                      return 'Please provide a description';
+                    }
+                    return null;
+                  },
                   onSaved: (value) {
                     _editProduct = Product(
                       id: null,
