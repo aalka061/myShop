@@ -8,6 +8,14 @@ class EditProductScreen extends StatefulWidget {
 }
 
 class _EditProductScreenState extends State<EditProductScreen> {
+  final _imageUrlController = TextEditingController();
+
+  @override
+  void dispose() {
+    _imageUrlController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,6 +44,37 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   maxLines: 3,
                   keyboardType: TextInputType.multiline,
                 ),
+                Row(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      margin: EdgeInsets.only(top: 8, right: 10),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 1,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      child: _imageUrlController.text.isEmpty
+                          ? Text('Enter URL')
+                          : FittedBox(
+                              child: Image.network(_imageUrlController.text),
+                              fit: BoxFit.cover,
+                            ),
+                    ),
+                    // text form field takes as much width as possible,
+                    // however a row has unconstrained width
+                    Expanded(
+                      child: TextFormField(
+                        decoration: InputDecoration(labelText: 'Image url'),
+                        keyboardType: TextInputType.url,
+                        textInputAction: TextInputAction.done,
+                        controller: _imageUrlController,
+                      ),
+                    )
+                  ],
+                )
               ],
             ),
           ),
