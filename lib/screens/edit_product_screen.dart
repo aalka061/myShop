@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_shop/providers/product.dart';
 import 'package:my_shop/providers/products.dart';
 import 'package:provider/provider.dart';
 import '../providers/product.dart';
@@ -14,6 +15,29 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _imageUrlController = TextEditingController();
   //keep track if this image url in focus or not
   final _imageUrlFocus = FocusNode();
+  var _initValues = {
+    'title': '',
+    'description': '',
+    'price': 0,
+    'imageUrl': '',
+  };
+
+  @override
+  void didChangeDependencies() {
+    final p = ModalRoute.of(context).settings.arguments as Product;
+    if (p == null) {
+      return;
+    }
+
+    _editProduct = p;
+    _initValues['title'] = p.title;
+    _initValues['description'] = p.description;
+    _initValues['price'] = p.price;
+    _initValues['imageUrl'] = '';
+    _imageUrlController.text = _editProduct.imageUrl;
+
+    super.didChangeDependencies();
+  }
 
   // this global key allows us to interact with the state of the form widget
   // all we need to do now is to establish connection of the form to this
@@ -86,6 +110,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
             child: Column(
               children: [
                 TextFormField(
+                  initialValue: _initValues['title'],
                   decoration: InputDecoration(
                     labelText: 'Title',
                     // error configuration
@@ -113,6 +138,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   },
                 ),
                 TextFormField(
+                  initialValue: _initValues['price'].toString(),
                   decoration: InputDecoration(labelText: 'Price'),
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
@@ -138,6 +164,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   },
                 ),
                 TextFormField(
+                  initialValue: _initValues['description'],
                   decoration: InputDecoration(labelText: 'Description'),
                   maxLines: 3,
                   keyboardType: TextInputType.multiline,
@@ -182,6 +209,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     // text form field takes as much width as possible,
                     // however a row has unconstrained width
                     Expanded(
+                      // you cannot use both cont
                       child: TextFormField(
                           decoration: InputDecoration(labelText: 'Image url'),
                           keyboardType: TextInputType.url,

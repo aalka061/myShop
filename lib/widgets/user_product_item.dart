@@ -23,7 +23,8 @@ class UserProductItem extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: () {
-                  Navigator.of(context).pushNamed(EditProductScreen.ROUTE);
+                  Navigator.of(context)
+                      .pushNamed(EditProductScreen.ROUTE, arguments: product);
                 },
                 color: Theme.of(context).primaryColor,
               ),
