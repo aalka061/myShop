@@ -85,7 +85,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
       return;
     }
     _form.currentState.save();
-    Provider.of<Products>(context, listen: false).addProduct(_editProduct);
+    if (_editProduct.id != null) {
+      Provider.of<Products>(context, listen: false).updateProduct(_editProduct);
+    } else {
+      Provider.of<Products>(context, listen: false).addProduct(_editProduct);
+    }
     Navigator.of(context).pop();
   }
 
@@ -129,11 +133,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   },
                   onSaved: (value) {
                     _editProduct = Product(
-                      id: null,
+                      id: _editProduct.id,
                       title: value,
                       price: _editProduct.price,
                       description: _editProduct.description,
                       imageUrl: _editProduct.imageUrl,
+                      isFavorite: _editProduct.isFavorite,
                     );
                   },
                 ),
@@ -155,11 +160,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   },
                   onSaved: (value) {
                     _editProduct = Product(
-                      id: null,
+                      id: _editProduct.id,
                       title: _editProduct.title,
                       price: double.parse(value),
                       description: _editProduct.description,
                       imageUrl: _editProduct.imageUrl,
+                      isFavorite: _editProduct.isFavorite,
                     );
                   },
                 ),
@@ -179,11 +185,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   },
                   onSaved: (value) {
                     _editProduct = Product(
-                      id: null,
+                      id: _editProduct.id,
                       title: _editProduct.title,
                       price: _editProduct.price,
                       description: value,
                       imageUrl: _editProduct.imageUrl,
+                      isFavorite: _editProduct.isFavorite,
                     );
                   },
                 ),
@@ -241,11 +248,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           },
                           onSaved: (value) {
                             _editProduct = Product(
-                              id: null,
+                              id: _editProduct.id,
                               title: _editProduct.title,
                               price: _editProduct.price,
                               description: _editProduct.description,
                               imageUrl: value,
+                              isFavorite: _editProduct.isFavorite,
                             );
                           }),
                     )

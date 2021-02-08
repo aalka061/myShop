@@ -68,6 +68,15 @@ class Products with ChangeNotifier {
     notifyListeners();
   }
 
+  void updateProduct(Product product) {
+    // go to the product index that we are trying to edit
+    final prodIndex = _items.indexWhere((prod) => prod.id == product.id);
+    if (prodIndex >= 0) {
+      _items[prodIndex] = product;
+      notifyListeners();
+    }
+  }
+
   List<Product> get favoriteItems {
     return _items.where((prodItem) => prodItem.isFavorite).toList();
   }
