@@ -77,6 +77,14 @@ class Products with ChangeNotifier {
     }
   }
 
+  void remoteProduct(Product product) {
+    final prodIndex = _items.indexWhere((prod) => prod.id == product.id);
+    if (prodIndex >= 0) {
+      _items.removeAt(prodIndex);
+      notifyListeners();
+    }
+  }
+
   List<Product> get favoriteItems {
     return _items.where((prodItem) => prodItem.isFavorite).toList();
   }
