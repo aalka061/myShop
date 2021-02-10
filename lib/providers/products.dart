@@ -57,10 +57,10 @@ class Products with ChangeNotifier {
     return _items.firstWhere((product) => product.id == id);
   }
 
-  void addProduct(Product product) {
+  Future<void> addProduct(Product product) {
     const base_url =
         'https://flutter-supershop-default-rtdb.firebaseio.com/products.json';
-    http
+    return http
         .post(
       base_url,
       body: json.encode(
@@ -76,11 +76,11 @@ class Products with ChangeNotifier {
         .then(
       (response) {
         final newProduct = Product(
-          id: DateTime.now().toString(),
+          id: json.decode(response.body)['name'],
           title: product.title,
           description: product.description,
           price: product.price,
-          imageUrl: json.decode(response.body)['name'],
+          imageUrl: product.imageUrl,
         );
 
         _items.add(newProduct);
