@@ -59,7 +59,7 @@ class Products with ChangeNotifier {
 
   Future<void> addProduct(Product product) {
     const base_url =
-        'https://flutter-supershop-default-rtdb.firebaseio.com/products.json';
+        'https://flutter-supershop-default-rtdb.firebaseio.com/products';
     return http
         .post(
       base_url,
@@ -86,7 +86,9 @@ class Products with ChangeNotifier {
         _items.add(newProduct);
         notifyListeners();
       },
-    );
+    ).catchError((error) {
+      throw error;
+    });
   }
 
   void updateProduct(Product product) {
