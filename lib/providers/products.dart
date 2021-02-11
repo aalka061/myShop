@@ -57,38 +57,37 @@ class Products with ChangeNotifier {
     return _items.firstWhere((product) => product.id == id);
   }
 
-  Future<void> addProduct(Product product) {
+  Future<void> addProduct(Product product) async {
+    //async makes the method always returns future
     const base_url =
         'https://flutter-supershop-default-rtdb.firebaseio.com/products';
-    return http
-        .post(
-      base_url,
-      body: json.encode(
-        {
-          'title': product.title,
-          'description': product.description,
-          'imageUrl': product.imageUrl,
-          'price': product.price,
-          'isFavorite': product.isFavorite
-        },
-      ),
-    )
-        .then(
-      (response) {
-        final newProduct = Product(
-          id: json.decode(response.body)['name'],
-          title: product.title,
-          description: product.description,
-          price: product.price,
-          imageUrl: product.imageUrl,
-        );
+    try {
+      final response = await http.post(
+        base_url,
+        body: json.encode(
+          {
+            'title': product.title,
+            'description': product.description,
+            'imageUrl': product.imageUrl,
+            'price': product.price,
+            'isFavorite': product.isFavorite
+          },
+        ),
+      );
+      // this code won't excute till post request above is done
+      final newProduct = Product(
+        id: json.decode(response.body)['name'],
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl,
+      );
 
-        _items.add(newProduct);
-        notifyListeners();
-      },
-    ).catchError((error) {
+      _items.add(newProduct);
+      notifyListeners();
+    } catch (error) {
       throw error;
-    });
+    }
   }
 
   void updateProduct(Product product) {

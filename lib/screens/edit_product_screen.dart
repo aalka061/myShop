@@ -79,7 +79,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   // to save form, you would need to interact with the form somehow
   // to do that we need a global key (it is one of the rare instances that we need to use global key)
-  void _saveForm() {
+  Future<void> _saveForm() async {
     // the save method triggers a method (onSaved) in every form field that allow us to
     // to take the value entered in the text field
     final isValid = _form.currentState.validate();
@@ -97,36 +97,31 @@ class _EditProductScreenState extends State<EditProductScreen> {
       });
       Navigator.of(context).pop();
     } else {
-      Provider.of<Products>(context, listen: false)
-          .addProduct(_editProduct)
-          .catchError(
-        (error) {
-          return showDialog<Null>(
-            context: context,
-            builder: (ctx) => AlertDialog(
-              title: Text('error occured'),
-              content: Text('Somthing went wrong'),
-              actions: [
-                FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Okey'),
-                )
-              ],
-            ),
-          );
-        },
-      ).then(
-        (value) {
-          setState(
-            () {
-              _isLoading = false;
-            },
-          );
-          Navigator.of(context).pop();
-        },
-      );
+      try {
+        await Provider.of<Products>(context, listen: false)
+            .addProduct(_editProduct);
+      } catch (e) {
+        await showDialog<Null>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text('error occured'),
+            content: Text('Somthing went wrong'),
+            actions: [
+              FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Okey'),
+              )
+            ],
+          ),
+        );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+        Navigator.of(context).pop();
+      }
     }
   }
 
