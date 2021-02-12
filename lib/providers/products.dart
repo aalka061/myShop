@@ -60,7 +60,7 @@ class Products with ChangeNotifier {
   Future<void> addProduct(Product product) async {
     //async makes the method always returns future
     const base_url =
-        'https://flutter-supershop-default-rtdb.firebaseio.com/products';
+        'https://flutter-supershop-default-rtdb.firebaseio.com/products.json';
     try {
       final response = await http.post(
         base_url,
@@ -109,6 +109,16 @@ class Products with ChangeNotifier {
 
   List<Product> get favoriteItems {
     return _items.where((prodItem) => prodItem.isFavorite).toList();
+  }
+
+  Future<void> fetchProducts() async {
+    const url =
+        'https://flutter-supershop-default-rtdb.firebaseio.com/products.json';
+
+    try {
+      final response = await http.get(url);
+      print(response);
+    } catch (e) {}
   }
 
 //   void showFavoritesOnly() {

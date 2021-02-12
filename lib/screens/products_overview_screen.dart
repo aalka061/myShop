@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:my_shop/widgets/app_drawer.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/products.dart';
+import '../widgets/app_drawer.dart';
 import '../providers/cart.dart';
 import '../screens/cart_screen.dart';
 import '../widgets/badge.dart';
-import 'package:provider/provider.dart';
 
 import '../widgets/products_grid.dart';
 
@@ -21,6 +23,13 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showOnlyFavorites = false;
+
+  @override
+  void initState() {
+    // you must use listen false when you are in initState
+    Provider.of<Products>(context, listen: false).fetchProducts();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
