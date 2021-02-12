@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_shop/providers/product.dart';
 import 'package:my_shop/providers/products.dart';
 import 'package:my_shop/screens/edit_product_screen.dart';
 import 'package:my_shop/widgets/app_drawer.dart';
@@ -24,9 +25,13 @@ class UserProductsScreen extends StatelessWidget {
         ],
       ),
       drawer: AppDrawer(),
-      body: ListView.builder(
-        itemCount: productsProvider.items.length,
-        itemBuilder: (_, i) => UserProductItem(productsProvider.items[i]),
+      body: RefreshIndicator(
+        onRefresh: () =>
+            Provider.of<Products>(context, listen: false).fetchProducts(),
+        child: ListView.builder(
+          itemCount: productsProvider.items.length,
+          itemBuilder: (_, i) => UserProductItem(productsProvider.items[i]),
+        ),
       ),
     );
   }
