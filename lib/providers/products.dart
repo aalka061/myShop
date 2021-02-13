@@ -112,10 +112,20 @@ class Products with ChangeNotifier {
     }
   }
 
-  void remoteProduct(Product product) {
+  Future<void> removeProduct(Product product) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == product.id);
+    var existingProduct = _items[prodIndex];
+
     if (prodIndex >= 0) {
+      final url =
+          'https://flutter-supershop-default-rtdb.firebaseio.com/products/${product.id}';
       _items.removeAt(prodIndex);
+      notifyListeners();
+      await http.delete(url).then((response) {
+        existingProduct = null;
+      }).catchError((_) {
+        _items.insert(prodIndex, product);
+      });
       notifyListeners();
     }
   }
