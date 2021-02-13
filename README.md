@@ -19,9 +19,21 @@ passing data via constructors can be quite cumbersome and difficult that lead to
 #### Provider Pattern:
 Data provider gets attached to a widget. Once it is attached, any child within that widget can go ahead and listen to this provider. If a widget has provider listener, then it get rebuild every time that the data in the provider changes.  
 
-- Using nest models and providers 
+- Using nested models and providers 
 - Different Provider syntax: (ChangeNotifierProvider vs ChangeNotifierProvider.value vs MultiProvider) 
 - Consumer vs provider.of 
+
+### Sending HTTP requests 
+ - Connecting flutter to a database (Firebase) 
+ - Send POST, GET, PATCH and DELETE http requets to manage products and orders using http library  
+ - Using aync & await or then()
+ - Showing loading & Putll-to-refersh indicators
+ - Handling error gracefully when using HTTP requets 
+ - Fetching Data in initState
+ - Usage of FutureBuilder widget 
+ - Optimistic updating by restoring old values if errors were to occur 
+ - Showing dialogs when errors occur
+ 
 
 ## Screenshots
 
