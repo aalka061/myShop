@@ -26,6 +26,44 @@ class Orders with ChangeNotifier {
     return [..._orders];
   }
 
+  Future<void> fetchOrders() async {
+    const url =
+        'https://flutter-supershop-default-rtdb.firebaseio.com/orders.json';
+
+    try {
+      final response = await http.get(url);
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      final List<OrderItem> loadedOrders = [];
+      if (extractedData == null) {
+        return;
+      }
+      extractedData.forEach(
+        (orderId, orderItem) {
+          loadedOrders.add(
+            OrderItem(
+              id: orderId,
+              amount: orderItem['amount'],
+              dateTime: DateTime.parse(orderItem['dateTime']),
+              cartItems: (orderItem['cartItems'] as List<dynamic>)
+                  .map(
+                    (cartItem) => CartItem(
+                      id: cartItem['id'],
+                      title: cartItem['title'],
+                      quantity: cartItem['quantity'],
+                      price: cartItem['price'],
+                    ),
+                  )
+                  .toList(),
+            ),
+          );
+        },
+      );
+
+      _orders = loadedOrders;
+      notifyListeners();
+    } catch (e) {}
+  }
+
   Future<void> addOrder(List<CartItem> cartItems, double total) async {
     const url =
         'https://flutter-supershop-default-rtdb.firebaseio.com/orders.json';
