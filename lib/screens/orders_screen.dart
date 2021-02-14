@@ -11,6 +11,8 @@ class OrdersScreen extends StatefulWidget {
   _OrdersScreenState createState() => _OrdersScreenState();
 }
 
+// We changed this widget to statful just because we want to use initState
+// to update data
 class _OrdersScreenState extends State<OrdersScreen> {
   var _isLoading = false;
   @override
@@ -22,7 +24,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
         });
         Provider.of<Orders>(context, listen: false).fetchOrders().then(
           (_) {
-            _isLoading = false;
+            setState(() {
+              _isLoading = false;
+            });
           },
         );
       },
