@@ -6,8 +6,8 @@ import '../models/http_exception.dart';
 
 class Auth with ChangeNotifier {
   String _token;
-  DateTime _expireDate;
-  String userId;
+  DateTime _expiryDate;
+  String _userId;
 
   final apiKey = "AIzaSyCSXFAvbFqvHddFk4vI6C2KnDmtAqRXaAM";
 
@@ -18,8 +18,8 @@ class Auth with ChangeNotifier {
   }
 
   String get token {
-    if (_expireDate != null &&
-        _expireDate.isAfter(DateTime.now()) &&
+    if (_expiryDate != null &&
+        _expiryDate.isAfter(DateTime.now()) &&
         _token != null) {
       return _token;
     }
@@ -42,10 +42,21 @@ class Auth with ChangeNotifier {
         ),
       );
       final resDecoded = json.decode(res.body);
-      print(resDecoded);
       if (resDecoded['error'] != null) {
         throw HttpException(resDecoded['error']['message']);
       }
+      // we we have not exception, we need to store the token, userId and expireDate
+      _token = resDecoded['idToken'];
+      _userId = resDecoded['localId'];
+      _expiryDate = DateTime.now().add(
+        Duration(
+          seconds: int.parse(
+            resDecoded['expiresIn'],
+          ),
+        ),
+      );
+      // Update user interface to trigger consutmer (Material app)
+      notifyListeners();
     } catch (e) {
       throw e;
     }
