@@ -47,6 +47,10 @@ class Products with ChangeNotifier {
 
   // var _showFavoriesOnly = false;
 
+  final String authToken;
+
+  Products(this.authToken, this._items);
+
   List<Product> get items {
     // if (_showFavoriesOnly) {
     //   return _items.where((element) => element.isFavorite).toList();
@@ -60,11 +64,12 @@ class Products with ChangeNotifier {
 
   Future<void> addProduct(Product product) async {
     //async makes the method always returns future
-    const base_url =
-        'https://flutter-supershop-default-rtdb.firebaseio.com/products.json';
+
+    final baseUrl =
+        'https://flutter-supershop-default-rtdb.firebaseio.com/products.json?auth=$authToken';
     try {
       final response = await http.post(
-        base_url,
+        baseUrl,
         body: json.encode(
           {
             'title': product.title,
@@ -141,8 +146,8 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchProducts() async {
-    const url =
-        'https://flutter-supershop-default-rtdb.firebaseio.com/products.json';
+    final url =
+        'https://flutter-supershop-default-rtdb.firebaseio.com/products.json?auth=$authToken';
 
     try {
       final response = await http.get(url);
