@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import '../models/http_exception.dart';
 import 'package:my_shop/providers/auth.dart';
 import 'package:provider/provider.dart';
 
@@ -103,6 +104,24 @@ class _AuthCardState extends State<AuthCard> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
+  void _showErrorDialog(String errorMessage) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('An Error Ocurred'),
+        content: Text(errorMessage),
+        actions: [
+          FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Okey'),
+          )
+        ],
+      ),
+    );
+  }
+
   Future<void> _submit() async {
     if (!_formKey.currentState.validate()) {
       // Invalid!
@@ -112,23 +131,45 @@ class _AuthCardState extends State<AuthCard> {
     setState(() {
       _isLoading = true;
     });
-    if (_authMode == AuthMode.Login) {
-      Provider.of<Auth>(context, listen: false)
-          .login(
-        _authData['email'],
-        _authData['password'],
-      )
-          .then(
-        (value) {
-          print("Logged in");
-        },
-      );
-    } else {
-      Provider.of<Auth>(context, listen: false).signup(
-        _authData['email'],
-        _authData['password'],
-      );
+    try {
+      if (_authMode == AuthMode.Login) {
+        await Provider.of<Auth>(context, listen: false)
+            .login(
+          _authData['email'],
+          _authData['password'],
+        )
+            .then(
+          (value) {
+            print("Logged in");
+          },
+        );
+      } else {
+        await Provider.of<Auth>(context, listen: false).signup(
+          _authData['email'],
+          _authData['password'],
+        );
+      }
+    } on HttpException catch (error) {
+      print(error.message);
+      // when validation fails from firbase side (e.g. user email already exists, wrong password)
+      var errorMessage = 'Authentication Failed!';
+      if (error.message.contains('EMAIL_EXISTS')) {
+        errorMessage = 'This email addresss is already in use.';
+      } else if (error.message.contains('INVALID_EMAIL')) {
+        errorMessage = 'This email addresss is not valid';
+      } else if (error.message.contains('WEEK_PASSWORD')) {
+        errorMessage = 'This password is too week';
+      } else if (error.message.contains('EMAIL_NOT_FOUND')) {
+        errorMessage = 'Could not find a user with that email.';
+      } else if (error.message.contains('INVALID_PASSWORD')) {
+        errorMessage = 'Invalid password.';
+      }
+      _showErrorDialog(errorMessage);
+    } catch (error) {
+      var errorMessage = 'Could not authenticate you, please try again later';
+      _showErrorDialog(errorMessage);
     }
+
     setState(() {
       _isLoading = false;
     });

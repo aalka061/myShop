@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
-import 'package:my_shop/models/http_exception.dart';
+import '../models/http_exception.dart';
 
 class Auth with ChangeNotifier {
   String _token;
@@ -22,15 +22,16 @@ class Auth with ChangeNotifier {
           {
             'email': email,
             'password': password,
+            'returnSecureToken': true,
           },
         ),
       );
       final resDecoded = json.decode(res.body);
+      print(resDecoded);
       if (resDecoded['error'] != null) {
         throw HttpException(resDecoded['error']['message']);
       }
     } catch (e) {
-      // no connection
       throw e;
     }
   }
