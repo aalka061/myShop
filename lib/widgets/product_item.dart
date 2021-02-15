@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_shop/providers/auth.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/cart.dart';
@@ -16,7 +17,10 @@ class ProductItem extends StatelessWidget {
     // instead of Provide.of, we can use Consumer widget
     // Consumer widget allows listening to subpart of the widget tree
     // and only that sub part gets build
+
     final product = Provider.of<Product>(context, listen: false);
+    //Get authentication token
+    final auth = Provider.of<Auth>(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -36,7 +40,7 @@ class ProductItem extends StatelessWidget {
                   product.isFavorite ? Icons.favorite : Icons.favorite_border),
               color: Theme.of(context).accentColor,
               onPressed: () {
-                product.toggleFavorite();
+                product.toggleFavorite(auth.token);
               },
             ),
           ),

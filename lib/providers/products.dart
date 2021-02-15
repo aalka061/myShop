@@ -101,7 +101,7 @@ class Products with ChangeNotifier {
     final prodIndex = _items.indexWhere((prod) => prod.id == product.id);
     if (prodIndex >= 0) {
       final url =
-          'https://flutter-supershop-default-rtdb.firebaseio.com/products/${product.id}.json';
+          'https://flutter-supershop-default-rtdb.firebaseio.com/products/${product.id}.json?auth=$authToken';
       await http.patch(
         url,
         body: json.encode(
@@ -124,7 +124,7 @@ class Products with ChangeNotifier {
 
     if (prodIndex >= 0) {
       final url =
-          'https://flutter-supershop-default-rtdb.firebaseio.com/products/${product.id}.json';
+          'https://flutter-supershop-default-rtdb.firebaseio.com/products/${product.id}.json?auth=$authToken';
 
       _items.removeAt(prodIndex);
       notifyListeners();
@@ -176,14 +176,4 @@ class Products with ChangeNotifier {
       notifyListeners();
     } catch (e) {}
   }
-
-//   void showFavoritesOnly() {
-//     _showFavoriesOnly = true;
-//     notifyListeners();
-//   }
-
-//   void showAll() {
-//     _showFavoriesOnly = false;
-//     notifyListeners();
-//   }
 }
