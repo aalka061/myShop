@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:my_shop/screens/products_overview_screen.dart';
 import '../models/http_exception.dart';
 import 'package:my_shop/providers/auth.dart';
 import 'package:provider/provider.dart';
@@ -149,6 +150,9 @@ class _AuthCardState extends State<AuthCard> {
           _authData['password'],
         );
       }
+      // To products views screen when user is successfuly logged in or singup
+      // downside we would need to login every time we want to access the shop screens
+      // Navigator.of(context).pushReplacementNamed(ProductsOverviewScreen.ROUTE);
     } on HttpException catch (error) {
       print(error.message);
       // when validation fails from firbase side (e.g. user email already exists, wrong password)

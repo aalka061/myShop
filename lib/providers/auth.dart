@@ -11,6 +11,21 @@ class Auth with ChangeNotifier {
 
   final apiKey = "AIzaSyCSXFAvbFqvHddFk4vI6C2KnDmtAqRXaAM";
 
+  // True when authenticated
+  // false when not authenticated
+  bool get isAuth {
+    return token != null;
+  }
+
+  String get token {
+    if (_expireDate != null &&
+        _expireDate.isAfter(DateTime.now()) &&
+        _token != null) {
+      return _token;
+    }
+    return null;
+  }
+
   Future<void> _athunticate(
       String email, String password, String urlSegment) async {
     final url =
