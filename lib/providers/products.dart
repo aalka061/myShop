@@ -48,8 +48,9 @@ class Products with ChangeNotifier {
   // var _showFavoriesOnly = false;
 
   final String authToken;
+  final String userId;
 
-  Products(this.authToken, this._items);
+  Products(this.authToken, this.userId, this._items);
 
   List<Product> get items {
     // if (_showFavoriesOnly) {
@@ -76,7 +77,6 @@ class Products with ChangeNotifier {
             'description': product.description,
             'imageUrl': product.imageUrl,
             'price': product.price,
-            'isFavorite': product.isFavorite
           },
         ),
       );
@@ -146,16 +146,23 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchProducts() async {
-    final url =
+    var url =
         'https://flutter-supershop-default-rtdb.firebaseio.com/products.json?auth=$authToken';
 
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       final List<Product> loaddedProducts = [];
+
       if (extractedData == null) {
         return;
       }
+
+      url =
+          'https://flutter-supershop-default-rtdb.firebaseio.com/userFavorites/$userId.json?auth=$authToken';
+      final favResponse = await http.get(url);
+      final favData = json.decode(favResponse.body);
+
       // key: id
       // value: product data
       extractedData.forEach(
@@ -167,7 +174,7 @@ class Products with ChangeNotifier {
               description: productAttributes['description'],
               price: productAttributes['price'],
               imageUrl: productAttributes['imageUrl'],
-              isFavorite: productAttributes['isFavorite'],
+              isFavorite: favData == null ? false : favData[productId] ?? false,
             ),
           );
         },

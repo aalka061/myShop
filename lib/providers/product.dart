@@ -32,12 +32,10 @@ class Product with ChangeNotifier {
         'https://flutter-supershop-default-rtdb.firebaseio.com/userFavorites/$userId/$id.json?auth=$token';
 
     try {
-      final response = await http.patch(
+      final response = await http.put(
         url,
         body: json.encode(
-          {
-            'isFavorite': isFavorite,
-          },
+          isFavorite,
         ),
       );
 
