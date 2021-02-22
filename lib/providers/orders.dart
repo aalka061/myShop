@@ -27,11 +27,12 @@ class Orders with ChangeNotifier {
   }
 
   final String authToken;
+  final String userId;
 
-  Orders(this.authToken, this._orders);
+  Orders(this.authToken, this.userId, this._orders);
   Future<void> fetchOrders() async {
     final url =
-        'https://flutter-supershop-default-rtdb.firebaseio.com/orders.json?auth=$authToken';
+        'https://flutter-supershop-default-rtdb.firebaseio.com/orders/$userId.json?auth=$authToken';
 
     try {
       final response = await http.get(url);
@@ -69,7 +70,7 @@ class Orders with ChangeNotifier {
 
   Future<void> addOrder(List<CartItem> cartItems, double total) async {
     final url =
-        'https://flutter-supershop-default-rtdb.firebaseio.com/orders.json?auth=$authToken';
+        'https://flutter-supershop-default-rtdb.firebaseio.com/orders/$userId.json?auth=$authToken';
 
     final timestamp = DateTime.now();
     try {
