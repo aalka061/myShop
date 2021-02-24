@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_shop/providers/auth.dart';
+
 import 'package:provider/provider.dart';
 
 import './providers/orders.dart';
@@ -8,7 +8,8 @@ import './screens/cart_screen.dart';
 import './screens/edit_product_screen.dart';
 import './screens/orders_screen.dart';
 import './screens/user_products_screen.dart';
-
+import './providers/auth.dart';
+import './screens/splash_screen.dart';
 import './screens/product_detail_screen.dart';
 import './screens/products_overview_screen.dart';
 import './providers/products.dart';
@@ -63,7 +64,16 @@ class MyApp extends StatelessWidget {
           ),
           // authenticated: go to product overview screen
           // not authentication: go auth screen
-          home: auth.isAuth ? ProductsOverviewScreen() : AuthScreen(),
+          home: auth.isAuth
+              ? ProductsOverviewScreen()
+              : FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (ctx, authResulSnapShot) =>
+                      authResulSnapShot.connectionState ==
+                              ConnectionState.waiting
+                          ? SplashScreen()
+                          : AuthScreen(),
+                ),
           routes: {
             ProductsOverviewScreen.ROUTE: (ctx) => ProductsOverviewScreen(),
             ProductDetailScreen.ROUTE: (ctx) => ProductDetailScreen(),
